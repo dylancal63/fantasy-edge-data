@@ -1,0 +1,40 @@
+# Weekly refresh of Fantasy Edge's precomputed data. Runs in the PUBLIC data repo
+# (fantasy-edge-data) — see README.md. Free on public repos.
+name: refresh-data
+
+on:
+  schedule:
+    - cron: '0 10 * * 3' # Wednesdays 10:00 UTC (after MNF is charted)
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: npm install --no-audit --no-fund
+      - name: Determine NFL season year
+        id: s
+        run: |
+          M=$(date -u +%m); Y=$(date -u +%Y)
+          if [ "$M" -lt 3 ]; then Y=$((Y-1)); fi
+          echo "season=$Y" >> "$GITHUB_OUTPUT"
+      - name: Build data
+        run: node build-data.mjs ${{ steps.s.outputs.season }}
+      - name: Publish JSON to repo root
+        run: |
+          cp out/profiles_*.json . 2>/dev/null || true
+          cp out/usage_*.json . 2>/dev/null || true
+      - name: Commit if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add profiles_*.json usage_*.json || true
+          git commit -m "data: refresh ${{ steps.s.outputs.season }}" || echo "no changes"
+          git push || true

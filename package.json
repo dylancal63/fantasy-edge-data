@@ -1,0 +1,13 @@
+{
+  "name": "ff-optimizer-profiles",
+  "private": true,
+  "type": "module",
+  "description": "Weekly precompute: free nflverse data -> compact team scheme profiles + per-player usage JSON (keyed by Sleeper id) for Fantasy Edge.",
+  "scripts": {
+    "build": "node build-data.mjs",
+    "build:profiles-only": "node build-profiles.mjs"
+  },
+  "dependencies": {
+    "csv-parse": "^5.5.6"
+  }
+}
