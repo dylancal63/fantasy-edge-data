@@ -15,7 +15,7 @@ node build-data.mjs 2025      # writes out/profiles_2025.json, out/usage_2025.js
 
 ## Hosting it (free, auto-refresh)
 
-The app already points at `https://raw.githubusercontent.com/dylancalabrese/fantasy-edge-data/main`
+The app already points at `https://raw.githubusercontent.com/dylancal63/fantasy-edge-data/main`
 (`DATA_BASE_URL` in `src/config/remoteData.ts`). You just need to create that public repo and push the
 **contents of this `server/` folder** to its root — the seed `profiles_2025.json` / `usage_2025.json`
 are already here, so the raw URLs serve real data the moment you push. Until then the app uses the
@@ -26,14 +26,14 @@ This folder lives inside the app's git repo, so publish it as a **fresh, separat
 ```sh
 # from a COPY of this server/ folder (not the app repo)
 # Option A — GitHub CLI (one command):
-gh repo create dylancalabrese/fantasy-edge-data --public --source=. --push
+gh repo create dylancal63/fantasy-edge-data --public --source=. --push
 
 # Option B — manual: create an empty public repo named fantasy-edge-data on github.com, then:
 git init
 git add .
 git commit -m "seed data repo"
 git branch -M main
-git remote add origin https://github.com/dylancalabrese/fantasy-edge-data.git
+git remote add origin https://github.com/dylancal63/fantasy-edge-data.git
 git push -u origin main
 ```
 
@@ -43,7 +43,7 @@ secrets are required (it uses the default `GITHUB_TOKEN` with `permissions: cont
 
 **Verify it's live:**
 ```sh
-curl -s https://raw.githubusercontent.com/dylancalabrese/fantasy-edge-data/main/usage_2025.json | head -c 120
+curl -s https://raw.githubusercontent.com/dylancal63/fantasy-edge-data/main/usage_2025.json | head -c 120
 ```
 should return JSON. (`raw.githubusercontent.com` is CDN-cached ~5 min.)
 
